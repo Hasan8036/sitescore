@@ -41,7 +41,7 @@ flowchart TD
 | Step | Notebook | Status | What it does |
 |---|---|---|---|
 | 01 | [`notebooks/01_data_prep.ipynb`](notebooks/01_data_prep.ipynb) | Done | Filters restaurants, builds the target, metro, price, cuisine, chain and competition variables, runs quality checks, saves charts |
-| 02 | `notebooks/02_modelling.ipynb` | Planned | Logistic regression built up in blocks; odds ratios, significance, diagnostics |
+| 02 | `notebooks/02_modelling.ipynb` | Done | Logistic regression built up in blocks; odds ratios, significance, diagnostics |
 | 03 | `notebooks/03_validation.ipynb` | Planned | Held-out metro test vs. a naive baseline; AUC, calibration; robustness checks |
 | 04 | `notebooks/04_demo` | Planned | Interactive demo |
 
