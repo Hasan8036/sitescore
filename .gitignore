@@ -1,0 +1,25 @@
+# Yelp data: licensed for educational use, not for redistribution
+data/*
+!data/README.md
+*.json
+!**/.vscode/*.json
+*.tar
+*.zip
+
+# Generated outputs (recreated by running the notebooks)
+notebooks/outputs/
+outputs/
+*.csv
+
+# Python / Jupyter
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+venv/
+.env
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.idea/
