@@ -1,0 +1,43 @@
+variable,description,type,missing,example
+business_id,Yelp business identifier,object,0,MTSW4McQd7CbVtyjqoe9mw
+name,Restaurant name,object,0,St Honore Pastries
+latitude,Latitude (degrees),float64,0,39.9555052
+longitude,Longitude (degrees),float64,0,-75.1555641
+city,City as listed on Yelp,object,0,Philadelphia
+state,State or province as listed on Yelp,object,0,PA
+metro,Nearest of 11 metro centres (used for the held-out-metro test),object,0,Philadelphia
+closed,"Target. 1 = permanently closed at the Yelp snapshot, 0 = open (1 - is_open)",int64,0,0
+price_tier,"Yelp price range 1-4, or 'Missing'",object,0,1
+price_num,Price range as a number 1-4 (NaN if missing); used for neighbour averages,float64,7784,1.0
+cuisine_group,"Cuisine group from categories, first match in a fixed priority list",object,0,Cafes & Breakfast
+is_chain,1 if the normalized name appears at >= 5 restaurants,int64,0,0
+is_chain_3,1 if the normalized name appears at >= 3 restaurants (robustness),int64,0,0
+is_chain_5,1 if the normalized name appears at >= 5 restaurants (robustness),int64,0,0
+is_chain_10,1 if the normalized name appears at >= 10 restaurants (robustness),int64,0,0
+n_rest_250m,"Other restaurants within 250 m, open or closed",int64,0,156
+n_rest_500m,"Other restaurants within 500 m, open or closed",int64,0,265
+n_rest_1000m,"Other restaurants within 1000 m, open or closed",int64,0,749
+n_same_cuisine_250m,Other restaurants of the same cuisine group within 250 m,int64,0,11
+n_same_cuisine_500m,Other restaurants of the same cuisine group within 500 m,int64,0,22
+n_same_cuisine_1000m,Other restaurants of the same cuisine group within 1000 m,int64,0,71
+nbr_mean_price_500m,Mean price tier of restaurants within 500 m (those reporting price),float64,1801,1.5726495726495726
+price_gap,Own price tier minus nbr_mean_price_500m,float64,9169,-0.5726495726495726
+log_n_rest_250m,log(1 + n_rest_250m). Model input,float64,0,5.056245805348308
+log_n_rest_500m,log(1 + n_rest_500m). Model input,float64,0,5.583496308781699
+log_n_rest_1000m,log(1 + n_rest_1000m). Model input,float64,0,6.620073206530356
+log_n_same_cuisine_250m,log(1 + n_same_cuisine_250m),float64,0,2.4849066497880004
+log_n_same_cuisine_500m,log(1 + n_same_cuisine_500m),float64,0,3.1354942159291497
+log_n_same_cuisine_1000m,log(1 + n_same_cuisine_1000m),float64,0,4.276666119016055
+same_cuisine_share_250m,n_same_cuisine_250m / n_rest_250m (0 if no neighbours). Model input,float64,0,0.07051282051282051
+same_cuisine_share_500m,n_same_cuisine_500m / n_rest_500m (0 if no neighbours). Model input,float64,0,0.0830188679245283
+same_cuisine_share_1000m,n_same_cuisine_1000m / n_rest_1000m (0 if no neighbours). Model input,float64,0,0.09479305740987984
+price_missing,1 if the restaurant reports no price tier,int64,0,0
+price_gap_missing,1 if price_gap cannot be computed (own or neighbour price missing),int64,0,0
+price_gap_filled,price_gap with missing values set to 0 (use together with price_gap_missing),float64,0,-0.5726495726495726
+abs_price_gap,Absolute value of price_gap_filled: distance from the local price level in either direction,float64,0,0.5726495726495726
+n_open_rest_250m,"Other OPEN restaurants within 250 m. Robustness check only, not a model input",int64,0,88
+n_open_rest_500m,"Other OPEN restaurants within 500 m. Robustness check only, not a model input",int64,0,165
+n_open_rest_1000m,"Other OPEN restaurants within 1000 m. Robustness check only, not a model input",int64,0,406
+log_n_open_rest_250m,log(1 + n_open_rest_250m). Robustness check only,float64,0,4.48863636973214
+log_n_open_rest_500m,log(1 + n_open_rest_500m). Robustness check only,float64,0,5.111987788356544
+log_n_open_rest_1000m,log(1 + n_open_rest_1000m). Robustness check only,float64,0,6.008813185442595
