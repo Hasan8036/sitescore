@@ -8,23 +8,27 @@ MGSC 661 Multivariate Statistics, McGill University (Fall 2026) · Hasan Malik, 
 
 ---
 
-## Key findings so far
+## Key findings
 
-From the data preparation step (52,268 restaurants across 11 metro areas, 33.1% closed at the Yelp snapshot). These are unadjusted comparisons; the model estimates adjusted associations.
-
-| | Closed share |
-|---|---|
-| Chains (5+ locations) | 17.2% |
-| Independents | 38.1% |
-| Fewest restaurants within 500 m (bottom fifth) | 25.0% |
-| Most restaurants within 500 m (top fifth) | 44.8% |
-
-The density pattern holds when only open neighbours are counted (26.0% → 44.0%), so it is not an artifact of counting closed restaurants.
+**Data (notebook 01).** 52,268 restaurants across 11 metro areas; 33.1% closed at the Yelp snapshot. Unadjusted, chains close far less than independents (17.2% vs 38.1%), and the busiest locations close far more than the quietest (44.8% vs 25.0% for the top and bottom fifth by restaurants within 500 m). The density pattern holds when only open neighbours are counted (26.0% → 44.0%).
 
 <p>
   <img src="reports/figures/closed_chain_vs_independent.png" width="49%">
   <img src="reports/figures/closed_by_density.png" width="49%">
 </p>
+
+**Model (notebook 02).** Holding the other inputs fixed (odds ratios from the logistic regression):
+
+| Factor | Effect on the odds of being closed |
+|---|---|
+| Chain (5+ locations) vs independent | about 64% lower |
+| Doubling the restaurants within 500 m | about 12–16% higher |
+| Any same-cuisine restaurant within 500 m | about 28% higher |
+| Each price tier away from the neighbourhood average | about 19% higher |
+
+The ranges cover the model with metro controls (Step 4) and the validated SiteScore model without them (Step 8); the exact SiteScore odds ratios are in Step 8 and `reports/figures/odds_ratios_sitescore.png`.
+
+**Validation (notebook 03).** Trained without Indianapolis and tested on it, the model reaches **AUC 0.687**, versus 0.671 for concept alone and 0.618 for chain status alone. Across all 11 held-out metros AUC ranges from 0.614 to 0.710 (mean 0.672), and predicted risk matches observed closure closely (mean 30.3% predicted vs 31.7% observed). Ranking is weaker among independent restaurants (AUC 0.627). See the [validation summary](docs/validation_summary.md).
 
 ## Workflow
 
@@ -41,19 +45,15 @@ flowchart TD
 | Step | Notebook | Status | What it does |
 |---|---|---|---|
 | 01 | [`notebooks/01_data_prep.ipynb`](notebooks/01_data_prep.ipynb) | Done | Filters restaurants, builds the target, metro, price, cuisine, chain and competition variables, runs quality checks, saves charts |
-| 02 | `notebooks/02_modelling.ipynb` | Done | Logistic regression built up in blocks; odds ratios, significance, diagnostics |
+| 02 | [`notebooks/02_modelling.ipynb`](notebooks/02_modelling.ipynb) | Done | Logistic regression built up in blocks; odds ratios, clustered significance, diagnostics; the final SiteScore model (Step 8) |
 | 03 | [`notebooks/03_validation.ipynb`](notebooks/03_validation.ipynb) | Done | Training-only grouped CV and threshold selection; held-out metro and baselines; bootstrap AUC intervals; all-metro, radius and chain-cutoff checks |
 | 04 | `notebooks/04_demo` | Planned | Interactive demo |
-
-## Validation
-
-[Notebook 03](notebooks/03_validation.ipynb) tests transfer to held-out metros. Indianapolis AUC is **0.687**, versus **0.671** for concept alone; mean AUC across eleven metros is **0.672**. These are exploratory tests of snapshot status. See the [validation summary](docs/validation_summary.md).
 
 ## Data
 
 The Yelp data is **not included** in this repository: Yelp licenses it for educational use and it should not be redistributed. See [`data/README.md`](data/README.md) for how to get it. Notebook 01 can download the one file it needs (the business file, about 120 MB) directly from Kaggle.
 
-### Variables used in the main model
+### Variables in the SiteScore model
 
 | Variable | Meaning |
 |---|---|
@@ -62,9 +62,10 @@ The Yelp data is **not included** in this repository: Yelp licenses it for educa
 | `cuisine_group` | One of 14 cuisine groups |
 | `is_chain` | Name appears at 5+ restaurants in the data |
 | `log_n_rest_500m` | log(1 + other restaurants within 500 m) |
-| `same_cuisine_share_500m` | Share of nearby restaurants with the same cuisine |
+| `has_same_cuisine_nbr` | At least one same-cuisine restaurant within 500 m |
 | `abs_price_gap`, `price_gap_missing` | Distance from the local average price, in either direction |
-| `metro` | Metro area (11) |
+
+The SiteScore model has no metro dummies, so it can score a city it was not trained on. Notebook 02 also fits a version with `metro` and the same-cuisine *share* (Step 4) as a robustness check.
 
 The full data dictionary and every data decision are written to `notebooks/outputs/` when notebook 01 runs.
 
