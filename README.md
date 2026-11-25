@@ -17,16 +17,18 @@ MGSC 661 Multivariate Statistics, McGill University (Fall 2026) · Hasan Malik, 
   <img src="reports/figures/closed_by_density.png" width="49%">
 </p>
 
-**Model (notebook 02).** Holding the other inputs fixed (odds ratios from the logistic regression):
+**Model (notebook 02).** The SiteScore model (Step 8), fitted on all 52,268 restaurants, holding the other inputs fixed:
 
-| Factor | Effect on the odds of being closed |
-|---|---|
-| Chain (5+ locations) vs independent | about 64% lower |
-| Doubling the restaurants within 500 m | about 12–16% higher |
-| Any same-cuisine restaurant within 500 m | about 28% higher |
-| Each price tier away from the neighbourhood average | about 19% higher |
+| Factor | Effect on the odds of being closed | 95% CI (clustered) |
+|---|---|---|
+| Chain (5+ locations) vs independent | 64% lower (OR 0.36) | 0.34–0.38 |
+| Doubling the restaurants within 500 m | 12% higher (OR 1.12) | 1.10–1.15 |
+| Any same-cuisine restaurant within 500 m | 28% higher (OR 1.28) | 1.21–1.35 |
+| Each price tier away from the neighbourhood average | 20% higher (OR 1.20) | 1.10–1.31 |
 
-The ranges cover the model with metro controls (Step 4) and the validated SiteScore model without them (Step 8); the exact SiteScore odds ratios are in Step 8 and `reports/figures/odds_ratios_sitescore.png`.
+Cuisine also matters: American, Italian and Mediterranean restaurants have the highest odds, Chinese the lowest. Price tier itself matters little once location is known. Adding metro controls (Step 4) does not change these conclusions.
+
+<p><img src="reports/figures/odds_ratios_sitescore.png" width="70%"></p>
 
 **Validation (notebook 03).** Trained without Indianapolis and tested on it, the model reaches **AUC 0.687**, versus 0.671 for concept alone and 0.618 for chain status alone. Across all 11 held-out metros AUC ranges from 0.614 to 0.710 (mean 0.672), and predicted risk matches observed closure closely (mean 30.3% predicted vs 31.7% observed). Ranking is weaker among independent restaurants (AUC 0.627). See the [validation summary](docs/validation_summary.md).
 
