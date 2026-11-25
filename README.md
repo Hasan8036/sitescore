@@ -45,13 +45,9 @@ flowchart TD
 | 03 | [`notebooks/03_validation.ipynb`](notebooks/03_validation.ipynb) | Done | Training-only grouped CV and threshold selection; held-out metro and baselines; bootstrap AUC intervals; all-metro, radius and chain-cutoff checks |
 | 04 | `notebooks/04_demo` | Planned | Interactive demo |
 
-## Geographic validation
+## Validation
 
-The validation notebook refits notebook 02's **B3 models without metro dummies**, so it can score a metro excluded from fitting. Indianapolis (4,150 restaurants) was selected by sample size only. The yes/no same-cuisine-neighbour version was selected within the training metros; its test AUC is **0.687** (conditional spatial-bootstrap 95% interval **0.672–0.704**), versus **0.671** for concept alone. The original share version is nearly tied at **0.6866**.
-
-At a 0.5 cutoff, closure recall is only **13.2%**. A cutoff selected from training out-of-fold predictions raises recall to **70.8%**, with **43.9% precision** and more false alarms. Mean AUC across eleven held-out metros is **0.672**. Independent-restaurant AUC is lower (**0.627**). These are exploratory snapshot-status checks, not a validated forecast of future failure.
-
-See [the validation write-up](docs/validation_summary.md) for the methods, trade-offs and figures.
+[Notebook 03](notebooks/03_validation.ipynb) tests transfer to held-out metros. Indianapolis AUC is **0.687**, versus **0.671** for concept alone; mean AUC across eleven metros is **0.672**. These are exploratory tests of snapshot status. See the [validation summary](docs/validation_summary.md).
 
 ## Data
 
