@@ -10,6 +10,7 @@ data/*
 notebooks/outputs/
 outputs/
 *.csv
+!reports/data_prep/*.csv
 
 # Python / Jupyter
 __pycache__/
