@@ -39,7 +39,7 @@ flowchart TD
     C --> D[02 Modelling<br/>logistic regression, odds ratios]
     C --> E[03 Validation<br/>held-out metro, baseline, AUC, calibration]
     D --> E
-    D --> F[04 Demo<br/>pin-drop SiteScore tool]
+    D --> F[04 Demo<br/>compare two sites on a map]
 ```
 
 | Step | Notebook | Status | What it does |
@@ -47,7 +47,7 @@ flowchart TD
 | 01 | [`notebooks/01_data_prep.ipynb`](notebooks/01_data_prep.ipynb) | Done | Filters restaurants, builds the target, metro, price, cuisine, chain and competition variables, runs quality checks, saves charts |
 | 02 | [`notebooks/02_modelling.ipynb`](notebooks/02_modelling.ipynb) | Done | Logistic regression built up in blocks; odds ratios, clustered significance, diagnostics; the final SiteScore model (Step 8) |
 | 03 | [`notebooks/03_validation.ipynb`](notebooks/03_validation.ipynb) | Done | Training-only grouped CV and threshold selection; held-out metro and baselines; bootstrap AUC intervals; all-metro, radius and chain-cutoff checks |
-| 04 | `notebooks/04_demo` | Planned | Interactive demo |
+| 04 | [`demo/`](demo/README.md) | Done | Interactive tool: place two sites on a map, pick a concept, compare their risk bands and what drives them |
 
 ## Data
 
@@ -67,7 +67,7 @@ The Yelp data is **not included** in this repository: Yelp licenses it for educa
 
 The SiteScore model has no metro dummies, so it can score a city it was not trained on. Notebook 02 also fits a version with `metro` and the same-cuisine *share* (Step 4) as a robustness check.
 
-The full data dictionary and every data decision are written to `notebooks/outputs/` when notebook 01 runs.
+The full data dictionary and every data decision are in [`reports/data_prep/`](reports/data_prep/README.md) (notebook 01 writes fresh copies to `notebooks/outputs/` each time it runs).
 
 **Leakage rule:** no ratings, review counts, check-ins or neighbours' closure flags are used as inputs, because they are only known after opening or reflect the outcome itself.
 
@@ -85,6 +85,16 @@ pip install -r requirements.txt
 
 Then open `notebooks/01_data_prep.ipynb`, set `DATA_SOURCE` in Step 0 (`"kaggle"`, `"drive"` or `"local"`), and run all cells. Outputs are written to `notebooks/outputs/`.
 
+### Run the demo
+
+After notebook 01 has run, from the repository root:
+
+```bash
+streamlit run demo/app.py
+```
+
+See [`demo/README.md`](demo/README.md).
+
 ## Repository structure
 
 ```
@@ -96,8 +106,10 @@ sitescore/
 │   ├── 01_data_prep.ipynb
 │   ├── 02_modelling.ipynb
 │   └── 03_validation.ipynb
+├── demo/                  Streamlit app: app.py (interface), sitescore.py (scoring)
 ├── reports/
-│   └── figures/           Charts used in the deck and report
+│   ├── figures/           Charts used in the deck and report
+│   └── data_prep/         Summary tables from notebook 01 (data dictionary, decisions log, checks)
 └── docs/
     ├── SiteScore_pitch_deck.pdf
     ├── AI_USAGE_DISCLOSURE.md
