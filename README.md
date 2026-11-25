@@ -10,7 +10,7 @@ MGSC 661 Multivariate Statistics, McGill University (Fall 2026) · Hasan Malik, 
 
 ## Key findings so far
 
-From the data preparation step (52,268 restaurants across 11 metro areas, 33.1% closed at the Yelp snapshot). These are unadjusted comparisons; the model separates the effects.
+From the data preparation step (52,268 restaurants across 11 metro areas, 33.1% closed at the Yelp snapshot). These are unadjusted comparisons; the model estimates adjusted associations.
 
 | | Closed share |
 |---|---|
@@ -42,8 +42,16 @@ flowchart TD
 |---|---|---|---|
 | 01 | [`notebooks/01_data_prep.ipynb`](notebooks/01_data_prep.ipynb) | Done | Filters restaurants, builds the target, metro, price, cuisine, chain and competition variables, runs quality checks, saves charts |
 | 02 | `notebooks/02_modelling.ipynb` | Done | Logistic regression built up in blocks; odds ratios, significance, diagnostics |
-| 03 | `notebooks/03_validation.ipynb` | Planned | Held-out metro test vs. a naive baseline; AUC, calibration; robustness checks |
+| 03 | [`notebooks/03_validation.ipynb`](notebooks/03_validation.ipynb) | Done | Training-only grouped CV and threshold selection; held-out metro and baselines; bootstrap AUC intervals; all-metro, radius and chain-cutoff checks |
 | 04 | `notebooks/04_demo` | Planned | Interactive demo |
+
+## Geographic validation
+
+The validation notebook refits notebook 02's **B3 models without metro dummies**, so it can score a metro excluded from fitting. Indianapolis (4,150 restaurants) was selected by sample size only. The yes/no same-cuisine-neighbour version was selected within the training metros; its test AUC is **0.687** (conditional spatial-bootstrap 95% interval **0.672–0.704**), versus **0.671** for concept alone. The original share version is nearly tied at **0.6866**.
+
+At a 0.5 cutoff, closure recall is only **13.2%**. A cutoff selected from training out-of-fold predictions raises recall to **70.8%**, with **43.9% precision** and more false alarms. Mean AUC across eleven held-out metros is **0.672**. Independent-restaurant AUC is lower (**0.627**). These are exploratory snapshot-status checks, not a validated forecast of future failure.
+
+See [the validation write-up](docs/validation_summary.md) for the methods, trade-offs and figures.
 
 ## Data
 
@@ -88,12 +96,15 @@ sitescore/
 ├── requirements.txt
 ├── data/                  Yelp data goes here locally (not committed)
 ├── notebooks/
-│   └── 01_data_prep.ipynb
+│   ├── 01_data_prep.ipynb
+│   ├── 02_modelling.ipynb
+│   └── 03_validation.ipynb
 ├── reports/
 │   └── figures/           Charts used in the deck and report
 └── docs/
     ├── SiteScore_pitch_deck.pdf
-    └── AI_USAGE_DISCLOSURE.md
+    ├── AI_USAGE_DISCLOSURE.md
+    └── validation_summary.md
 ```
 
 ## Limitations
