@@ -67,7 +67,7 @@ The Yelp data is **not included** in this repository: Yelp licenses it for educa
 
 The SiteScore model has no metro dummies, so it can score a city it was not trained on. Notebook 02 also fits a version with `metro` and the same-cuisine *share* (Step 4) as a robustness check.
 
-The full data dictionary and every data decision are written to `notebooks/outputs/` when notebook 01 runs.
+The full data dictionary and every data decision are in [`reports/data_prep/`](reports/data_prep/README.md) (notebook 01 writes fresh copies to `notebooks/outputs/` each time it runs).
 
 **Leakage rule:** no ratings, review counts, check-ins or neighbours' closure flags are used as inputs, because they are only known after opening or reflect the outcome itself.
 
@@ -108,7 +108,8 @@ sitescore/
 │   └── 03_validation.ipynb
 ├── demo/                  Streamlit app: app.py (interface), sitescore.py (scoring)
 ├── reports/
-│   └── figures/           Charts used in the deck and report
+│   ├── figures/           Charts used in the deck and report
+│   └── data_prep/         Summary tables from notebook 01 (data dictionary, decisions log, checks)
 └── docs/
     ├── SiteScore_pitch_deck.pdf
     ├── AI_USAGE_DISCLOSURE.md
